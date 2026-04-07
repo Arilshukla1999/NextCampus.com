@@ -1,0 +1,1033 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>NextCampus — Find Your Dream University Abroad</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet"/>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#0a0a0a;--bg2:#111111;--bg3:#1a1a1a;--border:rgba(255,255,255,0.08);--border2:rgba(255,255,255,0.15);--white:#ffffff;--gray:#999999;--gray2:#cccccc;--gray3:#444444;--gold:#f0a500;--card:#141414}
+body{background:var(--bg);color:var(--white);font-family:'DM Sans',sans-serif;min-height:100vh;overflow-x:hidden}
+::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:var(--bg)}::-webkit-scrollbar-thumb{background:var(--gray3);border-radius:3px}
+
+/* PARTICLES */
+#particles{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0;overflow:hidden}
+.particle{position:absolute;border-radius:50%;animation:float linear infinite;opacity:0}
+@keyframes float{0%{transform:translateY(100vh) scale(0);opacity:0}10%{opacity:1}90%{opacity:0.3}100%{transform:translateY(-100px) scale(1);opacity:0}}
+
+/* NAVBAR */
+.navbar{display:flex;align-items:center;justify-content:space-between;padding:14px 24px;background:rgba(10,10,10,0.95);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:1000;backdrop-filter:blur(20px)}
+.logo img{height:36px;object-fit:contain}
+.logo-fallback{font-family:'Playfair Display',serif;font-size:20px;font-weight:800}
+.logo-fallback span{color:var(--gray2)}
+.nav-links{display:flex;gap:4px}
+.nav-btn{background:none;border:none;color:var(--gray);padding:9px 14px;border-radius:10px;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;transition:all 0.2s;white-space:nowrap}
+.nav-btn:hover{background:var(--bg3);color:var(--white)}
+.nav-btn.active{background:var(--bg3);color:var(--white);border-bottom:2px solid var(--gold)}
+
+/* PAGES */
+.page{display:none;position:relative;z-index:1}
+.page.active{display:block;animation:pageIn 0.4s ease}
+@keyframes pageIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+
+/* HERO */
+.hero{padding:80px 24px 60px;text-align:center;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:600px;height:600px;background:radial-gradient(circle,rgba(240,165,0,0.06) 0%,transparent 70%);pointer-events:none}
+.hero-tag{display:inline-flex;align-items:center;gap:8px;background:rgba(240,165,0,0.08);border:1px solid rgba(240,165,0,0.25);color:var(--gold);padding:7px 18px;border-radius:20px;font-size:11px;font-weight:600;margin-bottom:28px;text-transform:uppercase;letter-spacing:0.1em;animation:fadeUp 0.6s ease}
+.hero h1{font-family:'Playfair Display',serif;font-size:clamp(30px,6vw,52px);font-weight:800;line-height:1.15;margin-bottom:18px;animation:fadeUp 0.7s ease}
+.hero h1 span{color:var(--gray2)}
+.hero p{color:var(--gray);font-size:15px;max-width:460px;margin:0 auto 36px;line-height:1.75;animation:fadeUp 0.8s ease}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+
+/* SEARCH */
+.search-wrap{max-width:560px;margin:0 auto 44px;position:relative;animation:fadeUp 0.9s ease}
+.search-bar{width:100%;padding:18px 60px 18px 24px;background:var(--bg2);border:1px solid var(--border2);border-radius:14px;color:var(--white);font-family:'DM Sans',sans-serif;font-size:15px;outline:none;transition:all 0.3s}
+.search-bar:focus{border-color:rgba(255,255,255,0.4);box-shadow:0 0 0 4px rgba(255,255,255,0.04)}
+.search-bar::placeholder{color:var(--gray)}
+.search-icon{position:absolute;right:18px;top:50%;transform:translateY(-50%);font-size:20px;cursor:pointer;opacity:0.6;transition:opacity 0.2s}
+.search-icon:hover{opacity:1}
+#searchResults{max-width:560px;margin:-24px auto 20px;text-align:left;display:none}
+#searchList{background:var(--bg2);border:1px solid var(--border2);border-radius:12px;overflow:hidden;box-shadow:0 20px 40px rgba(0,0,0,0.4)}
+
+/* STATS */
+.stats{display:flex;justify-content:center;gap:40px;margin-bottom:56px;flex-wrap:wrap;animation:fadeUp 1s ease}
+.stat{text-align:center}
+.stat-num{font-family:'Playfair Display',serif;font-size:30px;font-weight:800;color:var(--white)}
+.stat-label{font-size:12px;color:var(--gray);margin-top:3px}
+
+/* SECTION */
+.section{padding:44px 20px;max-width:1000px;margin:0 auto;position:relative;z-index:1}
+.section-title{font-family:'Playfair Display',serif;font-size:22px;font-weight:800;margin-bottom:6px}
+.section-sub{color:var(--gray);font-size:13px;margin-bottom:24px}
+.divider{height:1px;background:var(--border);margin:40px 0}
+
+/* COUNTRY CARDS */
+.countries-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:12px;margin-bottom:48px}
+.country-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px 14px;text-align:center;cursor:pointer;transition:all 0.25s}
+.country-card:hover{border-color:var(--gold);transform:translateY(-4px);box-shadow:0 12px 30px rgba(240,165,0,0.1)}
+.country-emoji{font-size:34px;margin-bottom:8px}
+.country-name{font-weight:600;font-size:13px}
+.country-unis{color:var(--gray);font-size:11px;margin-top:3px}
+
+/* TABS */
+.country-tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:28px}
+.country-tab{background:var(--bg2);border:1px solid var(--border);color:var(--gray);padding:8px 16px;border-radius:20px;cursor:pointer;font-size:13px;font-weight:500;transition:all 0.2s;font-family:'DM Sans',sans-serif}
+.country-tab:hover,.country-tab.active{background:var(--white);border-color:var(--white);color:#000}
+
+/* FILTERS */
+.filters{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:24px}
+.filter-select{background:var(--bg2);border:1px solid var(--border);color:var(--white);padding:10px 16px;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:13px;outline:none;cursor:pointer;transition:border-color 0.2s}
+.filter-select:focus{border-color:var(--border2)}
+.filter-select option{background:var(--bg2)}
+
+/* UNI CARDS */
+.uni-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:16px}
+.uni-card{background:var(--card);border:1px solid var(--border);border-radius:16px;overflow:hidden;transition:all 0.25s;cursor:pointer}
+.uni-card:hover{transform:translateY(-4px);border-color:var(--border2);box-shadow:0 16px 40px rgba(0,0,0,0.5)}
+.uni-img{height:160px;position:relative;overflow:hidden;background:#111}
+.uni-img img{width:100%;height:100%;object-fit:cover;transition:transform 0.4s}
+.uni-card:hover .uni-img img{transform:scale(1.08)}
+.uni-img-fallback{width:100%;height:100%;display:none;align-items:center;justify-content:center;font-size:52px}
+.uni-flag{position:absolute;top:10px;right:10px;font-size:20px;background:rgba(0,0,0,0.65);border-radius:6px;padding:3px 6px}
+.uni-overlay{position:absolute;bottom:0;left:0;right:0;height:60px;background:linear-gradient(transparent,rgba(0,0,0,0.8))}
+.uni-body{padding:16px}
+.uni-name{font-weight:700;font-size:15px;margin-bottom:3px}
+.uni-location{color:var(--gray);font-size:12px;margin-bottom:12px}
+.uni-tags{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.tag{background:rgba(255,255,255,0.06);border:1px solid var(--border);color:var(--gray2);padding:3px 8px;border-radius:6px;font-size:11px;font-weight:500}
+.tag.gold{background:rgba(240,165,0,0.1);border-color:rgba(240,165,0,0.3);color:var(--gold)}
+.uni-info{display:flex;justify-content:space-between;font-size:12px;margin-bottom:12px}
+.uni-info-item{text-align:center}
+.uni-info-val{font-weight:700;font-size:14px}
+.uni-info-key{color:var(--gray);margin-top:2px}
+.view-btn{width:100%;padding:10px;background:rgba(255,255,255,0.05);border:1px solid var(--border);border-radius:10px;color:var(--gray2);font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:all 0.2s}
+.view-btn:hover{background:var(--white);color:#000}
+
+/* SCHOLARSHIP CARDS */
+.schol-grid{display:grid;gap:14px}
+.schol-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px;transition:all 0.25s;cursor:pointer}
+.schol-card:hover{border-color:rgba(240,165,0,0.4);transform:translateY(-2px);box-shadow:0 12px 30px rgba(240,165,0,0.08)}
+.schol-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px;gap:12px}
+.schol-name{font-weight:700;font-size:15px}
+.schol-amount{background:rgba(240,165,0,0.1);border:1px solid rgba(240,165,0,0.3);color:var(--gold);padding:4px 12px;border-radius:20px;font-size:11px;font-weight:700;white-space:nowrap;flex-shrink:0}
+.schol-country{color:var(--gray);font-size:12px;margin-bottom:8px}
+.schol-desc{color:var(--gray2);font-size:13px;line-height:1.65;margin-bottom:10px}
+.schol-elig{color:var(--gray);font-size:12px;padding:8px 12px;background:var(--bg3);border-radius:8px}
+.schol-view-btn{width:100%;margin-top:12px;padding:10px;background:rgba(240,165,0,0.08);border:1px solid rgba(240,165,0,0.2);border-radius:10px;color:var(--gold);font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:all 0.2s}
+.schol-view-btn:hover{background:var(--gold);color:#000}
+
+/* VISA */
+.visa-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px}
+.visa-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px;transition:all 0.25s}
+.visa-card:hover{border-color:var(--border2);transform:translateY(-2px)}
+.visa-header{display:flex;align-items:center;gap:12px;margin-bottom:16px;padding-bottom:14px;border-bottom:1px solid var(--border)}
+.visa-flag{font-size:30px}
+.visa-country{font-family:'Playfair Display',serif;font-size:17px;font-weight:700}
+.visa-type{font-size:11px;color:var(--gray);margin-top:2px}
+.visa-row{display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid var(--border);font-size:13px}
+.visa-row:last-of-type{border-bottom:none}
+.visa-key{color:var(--gray)}
+.visa-val{font-weight:600;color:var(--gray2)}
+.visa-note{margin-top:12px;background:rgba(240,165,0,0.06);border:1px solid rgba(240,165,0,0.2);border-radius:8px;padding:10px 12px;color:var(--gold);font-size:12px;line-height:1.55}
+
+/* DETAIL PAGE */
+.detail-hero{position:relative;height:260px;overflow:hidden}
+.detail-hero img{width:100%;height:100%;object-fit:cover}
+.detail-hero-fallback{width:100%;height:100%;display:none;align-items:center;justify-content:center;font-size:80px;background:#111}
+.detail-hero-overlay{position:absolute;bottom:0;left:0;right:0;height:180px;background:linear-gradient(transparent,rgba(0,0,0,0.97))}
+.detail-hero-content{position:absolute;bottom:20px;left:20px;right:20px}
+.detail-back{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);color:var(--white);padding:6px 14px;border-radius:20px;font-size:12px;font-weight:600;cursor:pointer;margin-bottom:10px;backdrop-filter:blur(10px);transition:all 0.2s}
+.detail-back:hover{background:rgba(255,255,255,0.2)}
+.detail-uni-name{font-family:'Playfair Display',serif;font-size:clamp(20px,5vw,32px);font-weight:800;margin-bottom:6px}
+.detail-uni-sub{color:var(--gray2);font-size:13px}
+.detail-body{max-width:800px;margin:0 auto;padding:28px 20px}
+.detail-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:28px}
+.detail-stat{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px;text-align:center;transition:all 0.2s}
+.detail-stat:hover{border-color:var(--gold)}
+.detail-stat-val{font-family:'Playfair Display',serif;font-size:18px;font-weight:800}
+.detail-stat-key{color:var(--gray);font-size:10px;margin-top:4px;text-transform:uppercase;letter-spacing:0.05em}
+.detail-section{margin-bottom:24px}
+.detail-section-title{font-family:'Playfair Display',serif;font-size:17px;font-weight:700;margin-bottom:12px;padding-bottom:10px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px}
+.detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.detail-item{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:12px}
+.detail-item-key{color:var(--gray);font-size:10px;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:4px}
+.detail-item-val{font-weight:600;font-size:13px}
+.program-list{display:flex;flex-wrap:wrap;gap:8px}
+.program-tag{background:rgba(255,255,255,0.05);border:1px solid var(--border);color:var(--gray2);padding:6px 14px;border-radius:20px;font-size:13px;transition:all 0.2s}
+.program-tag:hover{border-color:var(--border2);color:var(--white)}
+.alumni-list{display:flex;flex-direction:column;gap:8px}
+.alumni-item{display:flex;align-items:center;gap:12px;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:12px;transition:all 0.2s}
+.alumni-item:hover{border-color:var(--border2)}
+.alumni-emoji{font-size:22px}
+.alumni-name{font-weight:600;font-size:14px}
+.alumni-desc{color:var(--gray);font-size:12px;margin-top:2px}
+.req-list{display:flex;flex-direction:column;gap:8px}
+.req-item{display:flex;align-items:flex-start;gap:10px;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:12px}
+.req-text{font-size:13px;line-height:1.5;color:var(--gray2)}
+.official-btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:16px;background:var(--white);border:none;border-radius:12px;color:#000;font-family:'DM Sans',sans-serif;font-size:15px;font-weight:700;cursor:pointer;text-decoration:none;transition:all 0.2s}
+.official-btn:hover{background:var(--gray2);transform:translateY(-1px)}
+
+/* SCHOLARSHIP DETAIL */
+.schol-detail-hero{background:linear-gradient(135deg,rgba(240,165,0,0.15),rgba(240,165,0,0.05));border-bottom:1px solid rgba(240,165,0,0.2);padding:28px 20px 24px}
+.schol-detail-back{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,0.08);border:1px solid var(--border);color:var(--white);padding:6px 14px;border-radius:20px;font-size:12px;font-weight:600;cursor:pointer;margin-bottom:16px;transition:all 0.2s}
+.schol-detail-back:hover{background:rgba(255,255,255,0.15)}
+.schol-detail-amount{display:inline-block;background:rgba(240,165,0,0.15);border:1px solid rgba(240,165,0,0.4);color:var(--gold);padding:6px 16px;border-radius:20px;font-size:13px;font-weight:700;margin-bottom:12px}
+.schol-detail-name{font-family:'Playfair Display',serif;font-size:clamp(20px,4vw,30px);font-weight:800;margin-bottom:8px}
+.schol-detail-country{color:var(--gray);font-size:14px}
+.schol-detail-body{max-width:800px;margin:0 auto;padding:28px 20px}
+.step-list{display:flex;flex-direction:column;gap:12px}
+.step-item{display:flex;gap:14px;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px;transition:all 0.2s}
+.step-item:hover{border-color:rgba(240,165,0,0.3)}
+.step-num{width:28px;height:28px;background:rgba(240,165,0,0.15);border:1px solid rgba(240,165,0,0.3);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:var(--gold);flex-shrink:0}
+.step-text{font-size:13px;line-height:1.6;color:var(--gray2);padding-top:4px}
+.doc-list{display:flex;flex-wrap:wrap;gap:8px}
+.doc-tag{background:var(--card);border:1px solid var(--border);color:var(--gray2);padding:8px 14px;border-radius:10px;font-size:13px;display:flex;align-items:center;gap:6px}
+.benefit-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.benefit-item{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:14px}
+.benefit-val{font-weight:700;font-size:16px;color:var(--white);margin-bottom:4px}
+.benefit-key{color:var(--gray);font-size:11px}
+.apply-btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:16px;background:var(--gold);border:none;border-radius:12px;color:#000;font-family:'DM Sans',sans-serif;font-size:15px;font-weight:700;cursor:pointer;text-decoration:none;transition:all 0.2s;margin-top:8px}
+.apply-btn:hover{background:var(--gold2,#ffc845);transform:translateY(-1px)}
+
+/* CHATBOT */
+.chat-bubble{position:fixed;bottom:24px;right:20px;z-index:999}
+.chat-toggle{width:54px;height:54px;background:var(--white);border:none;border-radius:50%;cursor:pointer;font-size:22px;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 24px rgba(0,0,0,0.5);transition:all 0.25s}
+.chat-toggle:hover{transform:scale(1.1);box-shadow:0 8px 32px rgba(0,0,0,0.6)}
+.chat-window{position:absolute;bottom:66px;right:0;width:310px;background:var(--bg2);border:1px solid var(--border2);border-radius:18px;overflow:hidden;display:none;box-shadow:0 24px 60px rgba(0,0,0,0.7)}
+.chat-window.open{display:flex;flex-direction:column;animation:slideUp 0.3s ease}
+@keyframes slideUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+.chat-header{background:var(--bg3);padding:14px 16px;display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--border)}
+.chat-avatar{width:34px;height:34px;background:var(--gold);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px}
+.chat-title{font-weight:700;font-size:14px}
+.chat-subtitle{font-size:11px;color:var(--gray)}
+.chat-messages{height:270px;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:10px}
+.msg{max-width:88%;padding:10px 13px;border-radius:14px;font-size:13px;line-height:1.5}
+.msg.bot{background:var(--bg3);color:var(--gray2);align-self:flex-start;border-bottom-left-radius:4px}
+.msg.user{background:var(--white);color:#000;align-self:flex-end;border-bottom-right-radius:4px}
+.chat-input-wrap{padding:12px;border-top:1px solid var(--border);display:flex;gap:8px}
+.chat-input{flex:1;background:var(--bg3);border:1px solid var(--border);border-radius:10px;color:var(--white);padding:10px 13px;font-family:'DM Sans',sans-serif;font-size:13px;outline:none}
+.chat-input::placeholder{color:var(--gray)}
+.chat-send{background:var(--white);border:none;border-radius:10px;color:#000;padding:10px 13px;cursor:pointer;font-size:15px;font-weight:700;transition:all 0.2s}
+.chat-send:hover{background:var(--gray2)}
+.empty{text-align:center;padding:48px;color:var(--gray)}
+
+@media(max-width:600px){
+  .navbar{padding:12px 14px}.nav-btn{padding:8px 8px;font-size:11px}.nav-links{gap:1px}
+  .uni-grid,.visa-grid{grid-template-columns:1fr}.chat-window{width:280px;right:-4px}
+  .stats{gap:20px}.hero{padding:60px 18px 36px}.detail-stats{grid-template-columns:repeat(3,1fr)}
+  .detail-grid,.benefit-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<!-- PARTICLES -->
+<div id="particles"></div>
+
+<nav class="navbar">
+  <div class="logo">
+    <img src="https://i.postimg.cc/B877zhcc/image.png" alt="NextCampus" onerror="this.style.display='none';document.getElementById('lf').style.display='block'"/>
+    <div class="logo-fallback" id="lf" style="display:none">Next<span>Campus</span></div>
+  </div>
+  <div class="nav-links">
+    <button class="nav-btn active" onclick="showPage('home',this)">🏠 Home</button>
+    <button class="nav-btn" onclick="showPage('universities',this)">🎓 Unis</button>
+    <button class="nav-btn" onclick="showPage('scholarships',this)">🏆 Scholarships</button>
+    <button class="nav-btn" onclick="showPage('visa',this)">🛂 Visa</button>
+  </div>
+</nav>
+
+<!-- HOME -->
+<div id="page-home" class="page active">
+  <div class="hero">
+    <div class="hero-tag">✈️ Your Global Education Journey Starts Here</div>
+    <h1>Find Your Dream<br/><span>University Abroad</span></h1>
+    <p>Explore top universities, scholarships, and visa information across the world's best study destinations.</p>
+    <div class="search-wrap">
+      <input class="search-bar" id="homeSearch" placeholder="Search universities, countries, programs..." oninput="handleHomeSearch(this.value)" onkeydown="if(event.key==='Enter')goSearch()"/>
+      <span class="search-icon" onclick="goSearch()">🔍</span>
+    </div>
+    <div id="searchResults"><div id="searchList"></div></div>
+    <div class="stats">
+      <div class="stat"><div class="stat-num">45+</div><div class="stat-label">Universities</div></div>
+      <div class="stat"><div class="stat-num">25+</div><div class="stat-label">Scholarships</div></div>
+      <div class="stat"><div class="stat-num">6</div><div class="stat-label">Countries</div></div>
+      <div class="stat"><div class="stat-num">Free</div><div class="stat-label">Always</div></div>
+    </div>
+  </div>
+  <div class="section">
+    <div class="section-title">🌍 Top Study Destinations</div>
+    <div class="section-sub">Click any country to explore universities</div>
+    <div class="countries-grid">
+      <div class="country-card" onclick="goToCountry('USA')"><div class="country-emoji">🇺🇸</div><div class="country-name">USA</div><div class="country-unis">4,000+ Universities</div></div>
+      <div class="country-card" onclick="goToCountry('UK')"><div class="country-emoji">🇬🇧</div><div class="country-name">UK</div><div class="country-unis">160+ Universities</div></div>
+      <div class="country-card" onclick="goToCountry('Canada')"><div class="country-emoji">🇨🇦</div><div class="country-name">Canada</div><div class="country-unis">220+ Universities</div></div>
+      <div class="country-card" onclick="goToCountry('Germany')"><div class="country-emoji">🇩🇪</div><div class="country-name">Germany</div><div class="country-unis">400+ Universities</div></div>
+      <div class="country-card" onclick="goToCountry('Australia')"><div class="country-emoji">🇦🇺</div><div class="country-name">Australia</div><div class="country-unis">40+ Universities</div></div>
+      <div class="country-card" onclick="goToCountry('France')"><div class="country-emoji">🇫🇷</div><div class="country-name">France</div><div class="country-unis">250+ Universities</div></div>
+    </div>
+    <div class="divider"></div>
+    <div class="section-title">⭐ Featured Universities</div>
+    <div class="section-sub">Top ranked universities worldwide — tap any to learn more</div>
+    <div class="uni-grid" id="featuredUnis"></div>
+  </div>
+</div>
+
+<!-- UNIVERSITIES -->
+<div id="page-universities" class="page">
+  <div class="section">
+    <div class="section-title">🎓 Universities</div>
+    <div class="section-sub">Filter and tap any university for full details</div>
+    <div class="filters">
+      <select class="filter-select" id="countryFilter" onchange="filterUnis()">
+        <option value="all">🌍 All Countries</option>
+        <option value="USA">🇺🇸 USA</option>
+        <option value="UK">🇬🇧 UK</option>
+        <option value="Canada">🇨🇦 Canada</option>
+        <option value="Germany">🇩🇪 Germany</option>
+        <option value="Australia">🇦🇺 Australia</option>
+        <option value="France">🇫🇷 France</option>
+      </select>
+      <select class="filter-select" id="budgetFilter" onchange="filterUnis()">
+        <option value="all">💰 All Budgets</option>
+        <option value="free">Free / Under $5,000</option>
+        <option value="low">$5,000-$20,000/yr</option>
+        <option value="mid">$20,000-$40,000/yr</option>
+        <option value="high">Above $40,000/yr</option>
+      </select>
+      <select class="filter-select" id="degreeFilter" onchange="filterUnis()">
+        <option value="all">📚 All Degrees</option>
+        <option value="Bachelor">Bachelor's</option>
+        <option value="Master">Master's</option>
+        <option value="PhD">PhD</option>
+      </select>
+    </div>
+    <div class="country-tabs" id="uniCountryTabs"></div>
+    <div class="uni-grid" id="uniGrid"></div>
+  </div>
+</div>
+
+<!-- SCHOLARSHIPS -->
+<div id="page-scholarships" class="page">
+  <div class="section">
+    <div class="section-title">🏆 Scholarships</div>
+    <div class="section-sub">Tap any scholarship to see full details, requirements and how to apply</div>
+    <div class="country-tabs" id="scholTabs"></div>
+    <div class="schol-grid" id="scholGrid"></div>
+  </div>
+</div>
+
+<!-- VISA -->
+<div id="page-visa" class="page">
+  <div class="section">
+    <div class="section-title">🛂 Visa Information</div>
+    <div class="section-sub">Student visa requirements, fees and processing times</div>
+    <div class="visa-grid" id="visaGrid"></div>
+  </div>
+</div>
+
+<!-- UNIVERSITY DETAIL -->
+<div id="page-detail" class="page">
+  <div class="detail-hero">
+    <img id="detailImg" src="" alt="" onerror="this.style.display='none';document.getElementById('detailFallback').style.display='flex'"/>
+    <div class="detail-hero-fallback" id="detailFallback" style="display:none"></div>
+    <div class="detail-hero-overlay"></div>
+    <div class="detail-hero-content">
+      <div class="detail-back" onclick="goBack()">← Back</div>
+      <div class="detail-uni-name" id="detailName"></div>
+      <div class="detail-uni-sub" id="detailSub"></div>
+    </div>
+  </div>
+  <div class="detail-body">
+    <div class="detail-stats" id="detailStats"></div>
+    <div class="detail-section"><div class="detail-section-title">📋 Overview</div><div class="detail-grid" id="detailOverview"></div></div>
+    <div class="detail-section"><div class="detail-section-title">📚 Programs</div><div class="program-list" id="detailPrograms"></div></div>
+    <div class="detail-section"><div class="detail-section-title">📝 Admission Requirements</div><div class="req-list" id="detailReqs"></div></div>
+    <div class="detail-section"><div class="detail-section-title">🏅 Notable Alumni</div><div class="alumni-list" id="detailAlumni"></div></div>
+    <div class="detail-section"><div class="detail-section-title">🔗 Official Website</div><a id="detailWebsite" href="#" target="_blank" class="official-btn">🌐 Visit Official Website →</a></div>
+  </div>
+</div>
+
+<!-- SCHOLARSHIP DETAIL -->
+<div id="page-schol-detail" class="page">
+  <div class="schol-detail-hero">
+    <div class="schol-detail-back" onclick="goBack()">← Back</div>
+    <div class="schol-detail-amount" id="sdAmount"></div>
+    <div class="schol-detail-name" id="sdName"></div>
+    <div class="schol-detail-country" id="sdCountry"></div>
+  </div>
+  <div class="schol-detail-body">
+    <div class="detail-section"><div class="detail-section-title">📖 About This Scholarship</div><p id="sdDesc" style="color:var(--gray2);font-size:14px;line-height:1.7"></p></div>
+    <div class="detail-section"><div class="detail-section-title">💰 What You Get</div><div class="benefit-grid" id="sdBenefits"></div></div>
+    <div class="detail-section"><div class="detail-section-title">✅ Eligibility Requirements</div><div class="req-list" id="sdEligibility"></div></div>
+    <div class="detail-section"><div class="detail-section-title">📄 Documents Needed</div><div class="doc-list" id="sdDocs"></div></div>
+    <div class="detail-section"><div class="detail-section-title">🗓 How To Apply — Step by Step</div><div class="step-list" id="sdSteps"></div></div>
+    <div class="detail-section"><a id="sdApplyLink" href="#" target="_blank" class="apply-btn">🚀 Apply Now →</a></div>
+  </div>
+</div>
+
+<!-- CHATBOT -->
+<div class="chat-bubble">
+  <div class="chat-window" id="chatWindow">
+    <div class="chat-header">
+      <div class="chat-avatar">🎓</div>
+      <div><div class="chat-title">NextCampus AI</div><div class="chat-subtitle">Ask me anything about studying abroad</div></div>
+    </div>
+    <div class="chat-messages" id="chatMessages">
+      <div class="msg bot">👋 Hi! Ask me about universities, scholarships, visa requirements or costs anywhere in the world!</div>
+    </div>
+    <div class="chat-input-wrap">
+      <input class="chat-input" id="chatInput" placeholder="Ask anything..." onkeydown="if(event.key==='Enter')sendChat()"/>
+      <button class="chat-send" onclick="sendChat()">➤</button>
+    </div>
+  </div>
+  <button class="chat-toggle" onclick="toggleChat()">🎓</button>
+</div>
+
+<script>
+// ─── PARTICLES ───
+(function(){
+  const container=document.getElementById("particles");
+  for(let i=0;i<18;i++){
+    const p=document.createElement("div");
+    p.className="particle";
+    const size=Math.random()*3+1;
+    p.style.cssText=`width:${size}px;height:${size}px;left:${Math.random()*100}%;background:rgba(240,165,0,${Math.random()*0.3+0.05});animation-duration:${Math.random()*20+15}s;animation-delay:${Math.random()*15}s`;
+    container.appendChild(p);
+  }
+})();
+
+const GROQ_KEY="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";
+const GROQ_URL="https://api.groq.com/openai/v1/chat/completions";
+
+// ─── UNIVERSITIES ───
+const universities=[
+  // USA
+  {name:"Harvard University",country:"USA",flag:"🇺🇸",emoji:"🏛️",bg:"#1a0505",
+   img:"https://images.unsplash.com/photo-1562774053-701939374585?w=800&q=80",
+   ranking:"#1 World",tuition:57000,acceptance:"3%",degrees:["Bachelor","Master","PhD"],
+   programs:["Law","Medicine","Business","Engineering","Economics","Political Science","Computer Science","Psychology"],
+   founded:"1636",location:"Cambridge, Massachusetts, USA",students:"21,000+",website:"https://www.harvard.edu",
+   requirements:["SAT: 1460-1580 or ACT: 33-35","GPA: 3.9+ unweighted","IELTS 7.0+ or TOEFL 100+","2-3 Letters of Recommendation","Personal Essays required","Strong extracurriculars"],
+   alumni:[{name:"Barack Obama",desc:"44th US President",emoji:"🇺🇸"},{name:"Mark Zuckerberg",desc:"Founder of Meta/Facebook",emoji:"💻"},{name:"Natalie Portman",desc:"Oscar-winning Actress",emoji:"🎬"}],
+   overview:{type:"Private Research University",campus:"209 acres",endowment:"$50.9 Billion",intlStudents:"25%"}},
+
+  {name:"MIT",country:"USA",flag:"🇺🇸",emoji:"⚗️",bg:"#05051a",
+   img:"https://images.unsplash.com/photo-1565073182887-6bcefbe225b1?w=800&q=80",
+   ranking:"#2 World",tuition:59000,acceptance:"3.9%",degrees:["Bachelor","Master","PhD"],
+   programs:["Aerospace Engineering","Computer Science","Physics","Mathematics","Biology","Chemistry","Architecture","Management"],
+   founded:"1861",location:"Cambridge, Massachusetts, USA",students:"11,500+",website:"https://www.mit.edu",
+   requirements:["SAT: 1510-1580 or ACT: 34-36","GPA: 4.0+ unweighted","IELTS 7.0+ or TOEFL 100+","2 Teacher Recommendations","Strong STEM background","Research experience valued"],
+   alumni:[{name:"Buzz Aldrin",desc:"Apollo 11 Astronaut",emoji:"🚀"},{name:"Kofi Annan",desc:"UN Secretary-General",emoji:"🌍"},{name:"Richard Feynman",desc:"Nobel Prize Physicist",emoji:"⚛️"}],
+   overview:{type:"Private Research University",campus:"168 acres",endowment:"$27.4 Billion",intlStudents:"33%"}},
+
+  {name:"Stanford University",country:"USA",flag:"🇺🇸",emoji:"🌲",bg:"#1a0505",
+   img:"https://images.unsplash.com/photo-1541339907198-e08756dedf3f?w=800&q=80",
+   ranking:"#3 World",tuition:58000,acceptance:"3.7%",degrees:["Bachelor","Master","PhD"],
+   programs:["Computer Science","Business","Medicine","Engineering","Law","Education","Earth Sciences","Humanities"],
+   founded:"1885",location:"Stanford, California, USA",students:"17,000+",website:"https://www.stanford.edu",
+   requirements:["SAT: 1500-1570 or ACT: 34-36","GPA: 3.96+ unweighted","IELTS 7.0+ or TOEFL 100+","Letters of Recommendation","Personal Essays","Leadership experience"],
+   alumni:[{name:"Elon Musk",desc:"CEO of Tesla & SpaceX",emoji:"🚗"},{name:"Larry Page",desc:"Co-Founder of Google",emoji:"🔍"},{name:"Reed Hastings",desc:"Co-Founder of Netflix",emoji:"🎬"}],
+   overview:{type:"Private Research University",campus:"8,180 acres",endowment:"$36.3 Billion",intlStudents:"24%"}},
+
+  {name:"University of California LA",country:"USA",flag:"🇺🇸",emoji:"🌴",bg:"#0a0505",
+   img:"https://images.unsplash.com/photo-1580582932707-520aed937b7b?w=800&q=80",
+   ranking:"#1 Public USA",tuition:44000,acceptance:"9%",degrees:["Bachelor","Master","PhD"],
+   programs:["Film","Business","Engineering","Medicine","Law","Arts","Psychology","Political Science"],
+   founded:"1919",location:"Los Angeles, California, USA",students:"47,000+",website:"https://www.ucla.edu",
+   requirements:["SAT: 1290-1530 or ACT: 29-35","GPA: 4.18+ weighted","IELTS 7.0+ or TOEFL 100+","Personal Insight Questions","Strong grades in high school","Extracurricular involvement"],
+   alumni:[{name:"James Franco",desc:"Award-winning Actor",emoji:"🎬"},{name:"Carol Burnett",desc:"Legendary Comedian",emoji:"😂"},{name:"Kareem Abdul-Jabbar",desc:"NBA Legend",emoji:"🏀"}],
+   overview:{type:"Public Research University",campus:"419 acres",endowment:"$7.3 Billion",intlStudents:"15%"}},
+
+  {name:"University of Chicago",country:"USA",flag:"🇺🇸",emoji:"🏙️",bg:"#0a0505",
+   img:"https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&q=80",
+   ranking:"#6 USA",tuition:62000,acceptance:"6%",degrees:["Bachelor","Master","PhD"],
+   programs:["Economics","Law","Business","Medicine","Social Sciences","Mathematics","Humanities","Physics"],
+   founded:"1890",location:"Chicago, Illinois, USA",students:"18,000+",website:"https://www.uchicago.edu",
+   requirements:["SAT: 1500-1580 or ACT: 34-36","GPA: 4.0+ weighted","IELTS 7.5+ or TOEFL 104+","Letters of Recommendation","Extended Essays (unique to UChicago)","Research or academic achievements"],
+   alumni:[{name:"Milton Friedman",desc:"Nobel Prize Economist",emoji:"📊"},{name:"Barack Obama",desc:"Taught Constitutional Law here",emoji:"🇺🇸"},{name:"Carl Sagan",desc:"Astrophysicist & Author",emoji:"🌌"}],
+   overview:{type:"Private Research University",campus:"217 acres",endowment:"$11 Billion",intlStudents:"35%"}},
+
+  {name:"University of Michigan",country:"USA",flag:"🇺🇸",emoji:"🐺",bg:"#050a1a",
+   img:"https://images.unsplash.com/photo-1498243691581-b145c3f54a5a?w=800&q=80",
+   ranking:"#23 USA",tuition:52000,acceptance:"17%",degrees:["Bachelor","Master","PhD"],
+   programs:["Engineering","Business","Medicine","Law","Public Policy","Information","Social Work","Music"],
+   founded:"1817",location:"Ann Arbor, Michigan, USA",students:"47,000+",website:"https://umich.edu",
+   requirements:["SAT: 1360-1530 or ACT: 32-35","GPA: 3.9+ unweighted","IELTS 6.5+ or TOEFL 84+","Recommendation Letters","Application Essays","Community involvement"],
+   alumni:[{name:"Larry Page",desc:"Co-Founder of Google",emoji:"🔍"},{name:"Arthur Miller",desc:"Pulitzer Prize Playwright",emoji:"🎭"},{name:"James Earl Jones",desc:"Voice of Darth Vader",emoji:"🎬"}],
+   overview:{type:"Public Research University",campus:"3,177 acres",endowment:"$17 Billion",intlStudents:"18%"}},
+
+  {name:"New York University",country:"USA",flag:"🇺🇸",emoji:"🗽",bg:"#0a051a",
+   img:"https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?w=800&q=80",
+   ranking:"#29 USA",tuition:58000,acceptance:"12%",degrees:["Bachelor","Master"],
+   programs:["Business","Arts","Law","Media","Film","Music","Social Work","Public Health","Global Affairs"],
+   founded:"1831",location:"New York City, USA",students:"51,000+",website:"https://www.nyu.edu",
+   requirements:["SAT: 1350-1530 or ACT: 31-34","GPA: 3.7+ unweighted","IELTS 7.0+ or TOEFL 100+","Recommendation Letters","Personal Statement","Portfolio for arts programs"],
+   alumni:[{name:"Lady Gaga",desc:"Grammy Award-winning Artist",emoji:"🎤"},{name:"Spike Lee",desc:"Award-winning Film Director",emoji:"🎬"},{name:"Martin Scorsese",desc:"Oscar-winning Director",emoji:"🏆"}],
+   overview:{type:"Private Research University",campus:"Urban NYC",endowment:"$4.7 Billion",intlStudents:"29%"}},
+
+  // UK
+  {name:"University of Oxford",country:"UK",flag:"🇬🇧",emoji:"📚",bg:"#05050f",
+   img:"https://images.unsplash.com/photo-1555993539-1732b0258235?w=800&q=80",
+   ranking:"#1 UK",tuition:38000,acceptance:"17%",degrees:["Bachelor","Master","PhD"],
+   programs:["Law","Medicine","PPE","History","Mathematics","Philosophy","Computer Science","Engineering"],
+   founded:"1096",location:"Oxford, England, UK",students:"24,000+",website:"https://www.ox.ac.uk",
+   requirements:["A-Levels AAA-A*A*A or equivalent","IELTS 7.5+ or TOEFL 110+","Written Work Samples","Admissions Test (subject specific)","Interview for shortlisted candidates","Outstanding academic references"],
+   alumni:[{name:"Stephen Hawking",desc:"Theoretical Physicist",emoji:"⚛️"},{name:"J.R.R. Tolkien",desc:"Author of Lord of the Rings",emoji:"📖"},{name:"Bill Clinton",desc:"42nd US President",emoji:"🇺🇸"}],
+   overview:{type:"Public Research University",campus:"Historic city campus",endowment:"£6.1 Billion",intlStudents:"46%"}},
+
+  {name:"University of Cambridge",country:"UK",flag:"🇬🇧",emoji:"🎓",bg:"#050f0f",
+   img:"https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=800&q=80",
+   ranking:"#2 UK",tuition:36000,acceptance:"21%",degrees:["Bachelor","Master","PhD"],
+   programs:["Natural Sciences","Engineering","Mathematics","Medicine","Computer Science","Economics","Law","Architecture"],
+   founded:"1209",location:"Cambridge, England, UK",students:"23,000+",website:"https://www.cam.ac.uk",
+   requirements:["A-Levels A*AA-A*A*A","IELTS 7.5+ or TOEFL 110+","Subject-specific Admissions Test","Two interviews for most subjects","School Reference","Outstanding academic achievement"],
+   alumni:[{name:"Isaac Newton",desc:"Discovered Gravity",emoji:"🍎"},{name:"Charles Darwin",desc:"Father of Evolution",emoji:"🦎"},{name:"Stephen Fry",desc:"Actor & Author",emoji:"🎭"}],
+   overview:{type:"Public Research University",campus:"Historic city campus",endowment:"£3.5 Billion",intlStudents:"38%"}},
+
+  {name:"Imperial College London",country:"UK",flag:"🇬🇧",emoji:"🔬",bg:"#05050f",
+   img:"https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?w=800&q=80",
+   ranking:"#3 UK",tuition:35000,acceptance:"14%",degrees:["Bachelor","Master","PhD"],
+   programs:["Engineering","Medicine","Science","Business","Computing","Chemical Engineering","Bioengineering","Physics"],
+   founded:"1907",location:"London, England, UK",students:"19,000+",website:"https://www.imperial.ac.uk",
+   requirements:["A-Levels AAA-A*A*A in STEM","IELTS 6.5-7.0 or TOEFL 92+","Strong Mathematics background","Personal Statement","Academic References","Interview for some programs"],
+   alumni:[{name:"Alexander Fleming",desc:"Discoverer of Penicillin",emoji:"💊"},{name:"H.G. Wells",desc:"Father of Science Fiction",emoji:"📖"},{name:"Brian May",desc:"Astrophysicist & Queen guitarist",emoji:"🎸"}],
+   overview:{type:"Public Research University",campus:"South Kensington London",endowment:"£1.3 Billion",intlStudents:"59%"}},
+
+  {name:"University College London",country:"UK",flag:"🇬🇧",emoji:"🏛️",bg:"#05050a",
+   img:"https://images.unsplash.com/photo-1529655683826-aba9b3e77383?w=800&q=80",
+   ranking:"#4 UK",tuition:30000,acceptance:"35%",degrees:["Bachelor","Master","PhD"],
+   programs:["Medicine","Law","Architecture","Arts","Engineering","Social Sciences","Biosciences","Computer Science"],
+   founded:"1826",location:"London, England, UK",students:"42,000+",website:"https://www.ucl.ac.uk",
+   requirements:["A-Levels AAB-A*AA","IELTS 6.5-7.5 or TOEFL 92+","Personal Statement","Academic References","Portfolio for Architecture/Arts","Interview for some programs"],
+   alumni:[{name:"Mahatma Gandhi",desc:"Father of the Indian Nation",emoji:"✌️"},{name:"Alexander Graham Bell",desc:"Inventor of the Telephone",emoji:"📞"},{name:"Coldplay",desc:"Grammy Award-winning Band",emoji:"🎵"}],
+   overview:{type:"Public Research University",campus:"Bloomsbury London",endowment:"£1.1 Billion",intlStudents:"52%"}},
+
+  {name:"University of Manchester",country:"UK",flag:"🇬🇧",emoji:"🏭",bg:"#050a05",
+   img:"https://images.unsplash.com/photo-1486325212027-8081e485255e?w=800&q=80",
+   ranking:"#5 UK Research",tuition:26000,acceptance:"55%",degrees:["Bachelor","Master","PhD"],
+   programs:["Engineering","Business","Medicine","Computer Science","Law","Arts","Social Sciences","Life Sciences"],
+   founded:"1824",location:"Manchester, England, UK",students:"40,000+",website:"https://www.manchester.ac.uk",
+   requirements:["A-Levels AAB-ABB","IELTS 6.5+ or TOEFL 90+","Personal Statement","Academic References","Interview for Medicine/Dentistry","Portfolio for Art & Design"],
+   alumni:[{name:"Alan Turing",desc:"Father of Computer Science",emoji:"💻"},{name:"Ernest Rutherford",desc:"Father of Nuclear Physics",emoji:"⚛️"},{name:"Neville Chamberlain",desc:"Former UK Prime Minister",emoji:"🇬🇧"}],
+   overview:{type:"Public Research University",campus:"Oxford Road Manchester",endowment:"£700 Million",intlStudents:"35%"}},
+
+  {name:"University of Edinburgh",country:"UK",flag:"🇬🇧",emoji:"🏰",bg:"#05050a",
+   img:"https://images.unsplash.com/photo-1583252369773-a0fc9a837e5c?w=800&q=80",
+   ranking:"#5 UK",tuition:28000,acceptance:"43%",degrees:["Bachelor","Master","PhD"],
+   programs:["Medicine","Law","Business","Arts","Science","Engineering","Informatics","Veterinary Medicine"],
+   founded:"1583",location:"Edinburgh, Scotland, UK",students:"35,000+",website:"https://www.ed.ac.uk",
+   requirements:["A-Levels AAA-ABB depending on subject","IELTS 6.5+ or TOEFL 92+","Personal Statement","Academic References","Portfolio for creative subjects","Interview for Medicine/Vet"],
+   alumni:[{name:"Charles Darwin",desc:"Natural Historian",emoji:"🦎"},{name:"David Hume",desc:"Famous Philosopher",emoji:"🤔"},{name:"Arthur Conan Doyle",desc:"Creator of Sherlock Holmes",emoji:"🔍"}],
+   overview:{type:"Public Research University",campus:"Historic Edinburgh city",endowment:"£600 Million",intlStudents:"43%"}},
+
+  // Canada
+  {name:"University of Toronto",country:"Canada",flag:"🇨🇦",emoji:"🍁",bg:"#05050a",
+   img:"https://images.unsplash.com/photo-1580537659466-0a9bfa916a54?w=800&q=80",
+   ranking:"#1 Canada",tuition:45000,acceptance:"43%",degrees:["Bachelor","Master","PhD"],
+   programs:["Medicine","Engineering","Business","Law","Arts & Science","Education","Dentistry","Pharmacy"],
+   founded:"1827",location:"Toronto, Ontario, Canada",students:"97,000+",website:"https://www.utoronto.ca",
+   requirements:["High School Average 93%+","IELTS 6.5+ or TOEFL 100+","Supplemental Application for some programs","Reference Letters","Personal Profile","Portfolio for arts programs"],
+   alumni:[{name:"Malcolm Gladwell",desc:"Best-selling Author",emoji:"📚"},{name:"Margaret Atwood",desc:"Author of Handmaid's Tale",emoji:"📖"},{name:"Mike Lazaridis",desc:"Inventor of BlackBerry",emoji:"📱"}],
+   overview:{type:"Public Research University",campus:"214 acres (3 campuses)",endowment:"$4 Billion",intlStudents:"25%"}},
+
+  {name:"University of British Columbia",country:"Canada",flag:"🇨🇦",emoji:"🌊",bg:"#050a0f",
+   img:"https://images.unsplash.com/photo-1497436072909-60f360e1d4b1?w=800&q=80",
+   ranking:"#2 Canada",tuition:38000,acceptance:"52%",degrees:["Bachelor","Master","PhD"],
+   programs:["Forestry","Engineering","Business","Science","Medicine","Arts","Education","Law"],
+   founded:"1908",location:"Vancouver, British Columbia, Canada",students:"68,000+",website:"https://www.ubc.ca",
+   requirements:["High School Average 87%+","IELTS 6.5+ or TOEFL 90+","Supplemental Application","Academic References","Personal Statement","Strong prerequisite grades"],
+   alumni:[{name:"Bing Thom",desc:"World-renowned Architect",emoji:"🏛️"},{name:"John Turner",desc:"17th Prime Minister of Canada",emoji:"🍁"},{name:"Robert Mundell",desc:"Nobel Prize Economics",emoji:"🏆"}],
+   overview:{type:"Public Research University",campus:"1,000 acres",endowment:"$2.4 Billion",intlStudents:"30%"}},
+
+  {name:"McGill University",country:"Canada",flag:"🇨🇦",emoji:"❄️",bg:"#0f0505",
+   img:"https://images.unsplash.com/photo-1519452575417-564c1401ecc0?w=800&q=80",
+   ranking:"#3 Canada",tuition:32000,acceptance:"46%",degrees:["Bachelor","Master","PhD"],
+   programs:["Medicine","Law","Engineering","Arts","Science","Education","Management","Music"],
+   founded:"1821",location:"Montreal, Quebec, Canada",students:"40,000+",website:"https://www.mcgill.ca",
+   requirements:["High School Average 93%+ sciences","IELTS 6.5+ or TOEFL 90+","Academic References","Personal Statement","Strong Math and Science grades","Bilingual environment English/French"],
+   alumni:[{name:"William Shatner",desc:"Captain Kirk in Star Trek",emoji:"🚀"},{name:"Leonard Cohen",desc:"Legendary Singer-Songwriter",emoji:"🎵"},{name:"Justin Trudeau",desc:"23rd PM of Canada",emoji:"🍁"}],
+   overview:{type:"Public Research University",campus:"Downtown Montreal",endowment:"$1.9 Billion",intlStudents:"32%"}},
+
+  {name:"University of Waterloo",country:"Canada",flag:"🇨🇦",emoji:"💻",bg:"#0f0f00",
+   img:"https://images.unsplash.com/photo-1497366216548-37526070297c?w=800&q=80",
+   ranking:"#4 Canada",tuition:42000,acceptance:"53%",degrees:["Bachelor","Master"],
+   programs:["CS","Engineering","Mathematics","Business","Science","Health","Environment","Arts"],
+   founded:"1957",location:"Waterloo, Ontario, Canada",students:"42,000+",website:"https://uwaterloo.ca",
+   requirements:["High School Average 90%+ engineering/CS","IELTS 6.5+ or TOEFL 90+","Supplemental Application AIF","Video Interview some programs","Strong Math background","Co-op experience valued"],
+   alumni:[{name:"Mike Lazaridis",desc:"Inventor of the BlackBerry",emoji:"📱"},{name:"Jim Balsillie",desc:"Co-CEO of BlackBerry",emoji:"💼"},{name:"Laszlo Bock",desc:"Former SVP Google",emoji:"🔍"}],
+   overview:{type:"Public Research University",campus:"1,000 acres",endowment:"$700 Million",intlStudents:"25%"}},
+
+  {name:"McMaster University",country:"Canada",flag:"🇨🇦",emoji:"⚕️",bg:"#0a0505",
+   img:"https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=800&q=80",
+   ranking:"#5 Canada",tuition:30000,acceptance:"58%",degrees:["Bachelor","Master","PhD"],
+   programs:["Medicine","Engineering","Business","Science","Social Sciences","Humanities","Health Sciences","Arts"],
+   founded:"1887",location:"Hamilton, Ontario, Canada",students:"37,000+",website:"https://www.mcmaster.ca",
+   requirements:["High School Average 85%+","IELTS 6.5+ or TOEFL 88+","Personal Statement","Academic References","Interview for Health Sciences","Strong science grades for Medicine"],
+   alumni:[{name:"Bertrand Russell",desc:"Nobel Prize Philosopher",emoji:"📚"},{name:"Silken Laumann",desc:"Olympic Rowing Champion",emoji:"🚣"},{name:"David Suzuki",desc:"Environmental Activist",emoji:"🌿"}],
+   overview:{type:"Public Research University",campus:"300 acres Hamilton",endowment:"$1 Billion",intlStudents:"22%"}},
+
+  // Germany
+  {name:"TU Munich",country:"Germany",flag:"🇩🇪",emoji:"⚙️",bg:"#050a0f",
+   img:"https://images.unsplash.com/photo-1467269204594-9661b134dd2b?w=800&q=80",
+   ranking:"#1 Germany",tuition:1500,acceptance:"8%",degrees:["Bachelor","Master","PhD"],
+   programs:["Engineering","Computer Science","Natural Sciences","Medicine","Architecture","Mathematics","Physics","Chemistry"],
+   founded:"1868",location:"Munich, Bavaria, Germany",students:"50,000+",website:"https://www.tum.de",
+   requirements:["Abitur or equivalent strong grades","German DSH-2 or TestDaF 4 for German programs","IELTS 6.5+ for English programs","APS Certificate some countries","Motivation Letter","Relevant academic background"],
+   alumni:[{name:"Rudolf Diesel",desc:"Inventor of the Diesel Engine",emoji:"⚙️"},{name:"Carl von Linde",desc:"Pioneer of Refrigeration",emoji:"❄️"},{name:"Wernher von Braun",desc:"Rocket Scientist",emoji:"🚀"}],
+   overview:{type:"Public Research University",campus:"Multiple campuses Munich",endowment:"Public funded",intlStudents:"35%"}},
+
+  {name:"Heidelberg University",country:"Germany",flag:"🇩🇪",emoji:"🏯",bg:"#0f0005",
+   img:"https://images.unsplash.com/photo-1491895200222-0fc4a4c35e18?w=800&q=80",
+   ranking:"#2 Germany",tuition:3000,acceptance:"20%",degrees:["Bachelor","Master","PhD"],
+   programs:["Medicine","Science","Law","Humanities","Social Sciences","Economics","Mathematics","Biosciences"],
+   founded:"1386",location:"Heidelberg, Baden-Wurttemberg, Germany",students:"31,000+",website:"https://www.uni-heidelberg.de",
+   requirements:["Abitur or equivalent","German DSH-2 or TestDaF 4","IELTS 6.5+ English programs","APS Certificate some countries","Motivation Letter","Academic References"],
+   alumni:[{name:"Helmut Kohl",desc:"Chancellor who reunified Germany",emoji:"🇩🇪"},{name:"Robert Bunsen",desc:"Inventor of Bunsen Burner",emoji:"🔬"},{name:"Hannah Arendt",desc:"Political Philosopher",emoji:"📚"}],
+   overview:{type:"Public Research University",campus:"Historic Heidelberg city",endowment:"Public funded",intlStudents:"22%"}},
+
+  {name:"LMU Munich",country:"Germany",flag:"🇩🇪",emoji:"🦁",bg:"#000f0a",
+   img:"https://images.unsplash.com/photo-1564981797816-1043664bf78d?w=800&q=80",
+   ranking:"#3 Germany",tuition:2000,acceptance:"15%",degrees:["Bachelor","Master","PhD"],
+   programs:["Medicine","Law","Business","Science","Humanities","Social Sciences","IT Management","Psychology"],
+   founded:"1472",location:"Munich, Bavaria, Germany",students:"52,000+",website:"https://www.lmu.de",
+   requirements:["Abitur or equivalent","German DSH-2 or TestDaF 4","IELTS 6.5+ English programs","APS Certificate","Numerus Clausus for competitive programs","Motivation Letter"],
+   alumni:[{name:"Pope Benedict XVI",desc:"264th Pope",emoji:"⛪"},{name:"Max Planck",desc:"Father of Quantum Theory",emoji:"⚛️"},{name:"Werner Heisenberg",desc:"Creator of Quantum Mechanics",emoji:"🔬"}],
+   overview:{type:"Public Research University",campus:"Historic Munich city",endowment:"Public funded",intlStudents:"20%"}},
+
+  {name:"Humboldt University Berlin",country:"Germany",flag:"🇩🇪",emoji:"🐻",bg:"#05050f",
+   img:"https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&q=80",
+   ranking:"#4 Germany",tuition:1800,acceptance:"25%",degrees:["Bachelor","Master","PhD"],
+   programs:["Humanities","Science","Law","Medicine","Social Sciences","Economics","Mathematics","Computer Science"],
+   founded:"1810",location:"Berlin, Germany",students:"36,000+",website:"https://www.hu-berlin.de",
+   requirements:["Abitur or equivalent","German DSH-2 or TestDaF 4","IELTS 6.5+ English programs","APS Certificate","Motivation Letter","Academic CV"],
+   alumni:[{name:"Karl Marx",desc:"Philosopher Author of Das Kapital",emoji:"📖"},{name:"Albert Einstein",desc:"Theory of Relativity",emoji:"⚛️"},{name:"Otto von Bismarck",desc:"First Chancellor of Germany",emoji:"🇩🇪"}],
+   overview:{type:"Public Research University",campus:"Historic Berlin city",endowment:"Public funded",intlStudents:"18%"}},
+
+  {name:"Free University Berlin",country:"Germany",flag:"🇩🇪",emoji:"🏙️",bg:"#050a05",
+   img:"https://images.unsplash.com/photo-1529655683826-aba9b3e77383?w=800&q=80",
+   ranking:"#5 Germany",tuition:1500,acceptance:"30%",degrees:["Bachelor","Master","PhD"],
+   programs:["Political Science","History","Social Sciences","Law","Biology","Chemistry","Pharmacy","Veterinary Medicine"],
+   founded:"1948",location:"Berlin, Germany",students:"35,000+",website:"https://www.fu-berlin.de",
+   requirements:["Abitur or equivalent","German DSH-2 or TestDaF 4","IELTS 6.5+ English programs","APS Certificate some countries","Motivation Letter","Academic CV"],
+   alumni:[{name:"John F. Kennedy",desc:"US President who gave Berlin speech",emoji:"🇺🇸"},{name:"Margot Kaessmann",desc:"Protestant Bishop",emoji:"⛪"},{name:"Various Nobel Laureates",desc:"Multiple prize winners",emoji:"🏆"}],
+   overview:{type:"Public Research University",campus:"Dahlem district Berlin",endowment:"Public funded",intlStudents:"20%"}},
+
+  // Australia
+  {name:"University of Melbourne",country:"Australia",flag:"🇦🇺",emoji:"🦘",bg:"#050a0f",
+   img:"https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80",
+   ranking:"#1 Australia",tuition:42000,acceptance:"70%",degrees:["Bachelor","Master","PhD"],
+   programs:["Medicine","Law","Engineering","Business","Education","Science","Arts","Music"],
+   founded:"1853",location:"Melbourne, Victoria, Australia",students:"52,000+",website:"https://www.unimelb.edu.au",
+   requirements:["ATAR 90+ or equivalent","IELTS 6.5-7.0 or TOEFL 79+","Personal Statement","Academic References","Portfolio for creative programs","Interview for Medicine/Dentistry"],
+   alumni:[{name:"Rupert Murdoch",desc:"Global Media Mogul",emoji:"📺"},{name:"Gough Whitlam",desc:"21st Australian Prime Minister",emoji:"🇦🇺"},{name:"Germaine Greer",desc:"Feminist Author",emoji:"📚"}],
+   overview:{type:"Public Research University",campus:"Parkville Melbourne",endowment:"AUD $3.7 Billion",intlStudents:"42%"}},
+
+  {name:"Australian National University",country:"Australia",flag:"🇦🇺",emoji:"🌏",bg:"#050a0f",
+   img:"https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=800&q=80",
+   ranking:"#2 Australia",tuition:38000,acceptance:"35%",degrees:["Bachelor","Master","PhD"],
+   programs:["Science","Law","Arts","Engineering","Business","Medicine","Policy","International Relations"],
+   founded:"1946",location:"Canberra, ACT, Australia",students:"25,000+",website:"https://www.anu.edu.au",
+   requirements:["ATAR 80-99 depending on program","IELTS 6.5+ or TOEFL 80+","Personal Statement","Academic References","Research Proposal for PhD","Relevant work experience some programs"],
+   alumni:[{name:"Patrick White",desc:"Nobel Prize-winning Author",emoji:"📖"},{name:"Helen Hughes",desc:"Renowned Economist",emoji:"📊"},{name:"John Hewson",desc:"Opposition Leader",emoji:"🇦🇺"}],
+   overview:{type:"Public Research University",campus:"358 acres Canberra",endowment:"AUD $1.9 Billion",intlStudents:"35%"}},
+
+  {name:"University of Sydney",country:"Australia",flag:"🇦🇺",emoji:"🦜",bg:"#0f0505",
+   img:"https://images.unsplash.com/photo-1523482580672-f109ba8cb9be?w=800&q=80",
+   ranking:"#3 Australia",tuition:40000,acceptance:"30%",degrees:["Bachelor","Master","PhD"],
+   programs:["Medicine","Law","Business","Architecture","Engineering","Arts","Science","Education"],
+   founded:"1850",location:"Sydney, New South Wales, Australia",students:"73,000+",website:"https://www.sydney.edu.au",
+   requirements:["ATAR 80-99.95 depending on program","IELTS 6.5-7.0 or TOEFL 85+","Personal Statement","Academic References","Audition for creative programs","Interview for Medicine"],
+   alumni:[{name:"Germaine Greer",desc:"Feminist Author Academic",emoji:"📚"},{name:"Tony Abbott",desc:"28th Australian Prime Minister",emoji:"🇦🇺"},{name:"Clive James",desc:"Author Critic Broadcaster",emoji:"🎬"}],
+   overview:{type:"Public Research University",campus:"72 acres Sydney",endowment:"AUD $2.5 Billion",intlStudents:"37%"}},
+
+  {name:"Monash University",country:"Australia",flag:"🇦🇺",emoji:"🌿",bg:"#050a05",
+   img:"https://images.unsplash.com/photo-1607237138185-eedd9c632b0b?w=800&q=80",
+   ranking:"#4 Australia",tuition:35000,acceptance:"65%",degrees:["Bachelor","Master","PhD"],
+   programs:["Medicine","Pharmacy","Engineering","Business","Law","Arts","Science","Education"],
+   founded:"1958",location:"Melbourne, Victoria, Australia",students:"86,000+",website:"https://www.monash.edu",
+   requirements:["ATAR 75-99 depending on program","IELTS 6.5+ or TOEFL 79+","Personal Statement","Academic References","Interview for Medicine","Strong prerequisite grades"],
+   alumni:[{name:"James Hird",desc:"Australian Rules Football Legend",emoji:"🏉"},{name:"Robert Doyle",desc:"Lord Mayor of Melbourne",emoji:"🇦🇺"},{name:"Andrew Demetriou",desc:"AFL CEO",emoji:"⚽"}],
+   overview:{type:"Public Research University",campus:"Multiple campuses",endowment:"AUD $2 Billion",intlStudents:"38%"}},
+
+  // France
+  {name:"Sciences Po Paris",country:"France",flag:"🇫🇷",emoji:"🗼",bg:"#05050f",
+   img:"https://images.unsplash.com/photo-1431274172761-fcdab704a519?w=800&q=80",
+   ranking:"#1 France Social",tuition:14000,acceptance:"20%",degrees:["Bachelor","Master"],
+   programs:["Political Science","Law","International Relations","Economics","Sociology","History","Journalism","Public Affairs"],
+   founded:"1872",location:"Paris, France",students:"14,000+",website:"https://www.sciencespo.fr",
+   requirements:["Baccalaureat or equivalent high grades","French or English proficiency","Written Entrance Exam","Oral Interview","Personal Essay","Strong humanities background"],
+   alumni:[{name:"Emmanuel Macron",desc:"President of France",emoji:"🇫🇷"},{name:"Dominique Strauss-Kahn",desc:"Former IMF Director",emoji:"💼"},{name:"Laurent Fabius",desc:"Former PM of France",emoji:"🇫🇷"}],
+   overview:{type:"Private Grande Ecole",campus:"Multiple Paris campuses",endowment:"EUR 180 Million",intlStudents:"47%"}},
+
+  {name:"HEC Paris",country:"France",flag:"🇫🇷",emoji:"💼",bg:"#050a0f",
+   img:"https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=800&q=80",
+   ranking:"#1 Europe Business",tuition:42000,acceptance:"12%",degrees:["Master","MBA"],
+   programs:["Business","Finance","Management","Entrepreneurship","Marketing","Strategy","Leadership","International Business"],
+   founded:"1881",location:"Jouy-en-Josas near Paris, France",students:"4,500+",website:"https://www.hec.edu",
+   requirements:["GMAT 690+ for MBA","IELTS 7.0+ or TOEFL 105+","3+ years work experience MBA","CPGE or Bachelor for Master","Essays and References","Interview for shortlisted"],
+   alumni:[{name:"Bernard Arnault",desc:"CEO of LVMH",emoji:"💎"},{name:"Carlos Ghosn",desc:"Former CEO Renault-Nissan",emoji:"🚗"},{name:"Jean-Paul Agon",desc:"CEO of L'Oreal",emoji:"💄"}],
+   overview:{type:"Private Grande Ecole",campus:"Suburban Paris campus",endowment:"EUR 250 Million",intlStudents:"60%"}},
+
+  {name:"Ecole Polytechnique",country:"France",flag:"🇫🇷",emoji:"🔭",bg:"#05050f",
+   img:"https://images.unsplash.com/photo-1519452575417-564c1401ecc0?w=800&q=80",
+   ranking:"#1 France Engineering",tuition:15000,acceptance:"7%",degrees:["Bachelor","Master","PhD"],
+   programs:["Engineering","Physics","Mathematics","Computer Science","Chemistry","Biology","Economics","Humanities"],
+   founded:"1794",location:"Palaiseau near Paris, France",students:"3,000+",website:"https://www.polytechnique.edu",
+   requirements:["CPGE Classes Preparatoires 2 years","Competitive Entrance Exam very hard","IELTS 7.0+ or TOEFL 100+ international","Exceptional Math and Physics skills","Physical fitness test","Interview"],
+   alumni:[{name:"Augustin-Louis Cauchy",desc:"Father of Mathematical Analysis",emoji:"📐"},{name:"Gaspard Monge",desc:"Inventor of Descriptive Geometry",emoji:"📏"},{name:"Henri Poincare",desc:"Pioneer of Modern Mathematics",emoji:"🔢"}],
+   overview:{type:"Public Grande Ecole",campus:"Suburban Paris campus",endowment:"Public funded",intlStudents:"30%"}},
+
+  {name:"Paris-Saclay University",country:"France",flag:"🇫🇷",emoji:"⚛️",bg:"#050a0f",
+   img:"https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=800&q=80",
+   ranking:"#2 France Science",tuition:5000,acceptance:"25%",degrees:["Bachelor","Master","PhD"],
+   programs:["Physics","Mathematics","Computer Science","Biology","Chemistry","Engineering","Medicine","Social Sciences"],
+   founded:"2019",location:"Paris-Saclay, France",students:"65,000+",website:"https://www.universite-paris-saclay.fr",
+   requirements:["Baccalaureat with high grades","French proficiency for most programs","IELTS 6.5+ for English programs","Motivation Letter","Academic References","Research background for PhD"],
+   alumni:[{name:"Many Nobel Laureates",desc:"Top French research university",emoji:"🏆"},{name:"Leading researchers",desc:"In physics and mathematics",emoji:"⚛️"},{name:"Industry leaders",desc:"From tech and science",emoji:"💡"}],
+   overview:{type:"Public Research University",campus:"Paris-Saclay cluster",endowment:"Public funded",intlStudents:"25%"}},
+];
+
+// ─── SCHOLARSHIPS ───
+const scholarships=[
+  {name:"Fulbright Foreign Student Program",country:"USA",flag:"🇺🇸",amount:"Full Funding",
+   desc:"The Fulbright Program is one of the most prestigious scholarship programs in the world, sponsored by the US government. It supports graduate students, scholars, and professionals from abroad for study and research in the United States.",
+   benefits:[{val:"100%",key:"Tuition Covered"},{val:"Monthly",key:"Living Stipend"},{val:"✈️ Included",key:"Airfare"},{val:"Full",key:"Health Insurance"}],
+   eligibility:["Bachelor's degree required","Strong academic record (3.5+ GPA)","Leadership potential and community involvement","Citizens of participating countries","English proficiency (IELTS 7.0+ or TOEFL 90+)","Must return to home country after program"],
+   docs:["📋 Completed Fulbright Application","📄 3 Reference Letters","📝 Study/Research Proposal","🎓 Academic Transcripts","📸 Passport Copy","💬 Language Proficiency Scores"],
+   steps:["Visit the Fulbright website and find your country's commission","Check application deadlines — usually 12-18 months before program start","Complete the online application at apply.iie.org","Write compelling study/research proposal (most important part)","Request letters of recommendation from professors","Submit all documents before deadline","Shortlisted candidates attend interview","Winners notified and begin placement process"],
+   deadline:"Varies by country (usually September-October)",
+   link:"https://foreign.fulbrightonline.org"},
+
+  {name:"Chevening Scholarship",country:"UK",flag:"🇬🇧",amount:"Full Funding",
+   desc:"Chevening is the UK government's international awards programme, making awards to outstanding scholars around the world. It is funded by the Foreign, Commonwealth and Development Office and partner organisations.",
+   benefits:[{val:"100%",key:"Tuition Covered"},{val:"Monthly",key:"Living Allowance"},{val:"✈️ Included",key:"Return Flights"},{val:"Full",key:"Visa Fees Covered"}],
+   eligibility:["Citizens of Chevening-eligible countries","Minimum 2 years work experience","Bachelor's degree or equivalent","Leadership and networking potential","Return to home country for 2 years after","IELTS 6.5+ or TOEFL 79+ (by application deadline)"],
+   docs:["📋 Online Chevening Application","📄 2 Reference Letters","🎓 Academic Transcripts","💼 CV/Resume","📝 4 Short Essays","📸 Passport Copy"],
+   steps:["Check if your country is eligible at chevening.org","Applications open in August, close in November","Create account and complete online application","Write four essays carefully — very important","Submit two references (academic/professional)","If shortlisted, attend in-person interview","Meet English requirements before interview","Successful candidates receive award in June"],
+   deadline:"November annually",
+   link:"https://www.chevening.org"},
+
+  {name:"DAAD Scholarship Germany",country:"Germany",flag:"🇩🇪",amount:"850-1200 EUR/month",
+   desc:"The German Academic Exchange Service (DAAD) is the world's largest funding organisation for international academic exchange. It offers thousands of scholarships annually for study and research in Germany.",
+   benefits:[{val:"EUR 850+",key:"Monthly Stipend"},{val:"Included",key:"Health Insurance"},{val:"One-time",key:"Travel Allowance"},{val:"EUR 103",key:"Study/Research Grant"}],
+   eligibility:["Above-average academic grades","Relevant bachelor's or master's degree","Motivation and academic potential","Citizens of non-EU countries primarily","German or English depending on program","Usually under 32 years (some programs differ)"],
+   docs:["📋 DAAD Online Application","📄 2-3 Academic References","🎓 Transcripts and Degree Certificates","📝 Study/Research Proposal","💬 Language Certificates","📸 CV/Resume","🔤 APS Certificate (for some countries)"],
+   steps:["Visit daad.de and find the right scholarship for your field","Check application portal — most applications via DAAD portal","Prepare your study/research proposal (very detailed)","Get letters of recommendation from professors","Collect all documents including language certificates","Submit application before deadline","Interviews held for shortlisted candidates","Results announced and visa process begins"],
+   deadline:"Varies by program (October-November for following year)",
+   link:"https://www.daad.de"},
+
+  {name:"Australia Awards Scholarship",country:"Australia",flag:"🇦🇺",amount:"Full Funding",
+   desc:"Australia Awards Scholarships are prestigious international scholarships funded by the Australian Government, providing opportunities for people from developing countries to undertake full-time undergraduate or postgraduate study in Australia.",
+   benefits:[{val:"100%",key:"Tuition & Fees"},{val:"Monthly",key:"Living Allowance"},{val:"✈️ Included",key:"Return Airfare"},{val:"Full",key:"OSHC Insurance"}],
+   eligibility:["Citizens of eligible developing countries","Not currently in Australia","Minimum 2 years work experience (post-grad)","Strong academic record","Commitment to returning home after","English proficiency IELTS 6.5+"],
+   docs:["📋 Australia Awards Online Application","📄 3 Reference Letters","🎓 Academic Transcripts","📝 Personal Statement","💼 Employment Records","📸 Passport Copy","💬 English Test Scores"],
+   steps:["Visit australiaawards.gov.au and confirm eligibility","Applications open February, close April/May","Complete online application through your country's program","Write strong personal statement on your development goals","Submit all required documents and references","Shortlisted candidates may attend interview","Medical and police check for selected candidates","Visa application and pre-departure briefing"],
+   deadline:"April-May annually (varies by country)",
+   link:"https://www.dfat.gov.au/australiaawards"},
+
+  {name:"Eiffel Excellence Scholarship",country:"France",flag:"🇫🇷",amount:"1181 EUR/month",
+   desc:"The Eiffel Excellence Scholarship Programme was established by the French Ministry for Europe and Foreign Affairs to enable French higher education institutions to attract top foreign students for Master's level and PhD programmes.",
+   benefits:[{val:"EUR 1,181",key:"Monthly Stipend"},{val:"Included",key:"Health Insurance"},{val:"One-time",key:"Travel Allowance"},{val:"Access",key:"Cultural Activities"}],
+   eligibility:["Non-French citizens only","Under 30 years for Master programs","Under 35 years for PhD programs","Excellent academic record","Nominated by French institution","Not currently studying in France"],
+   docs:["📋 Nomination by French institution","📄 Academic References","🎓 Transcripts","📝 Research Proposal (PhD)","💬 Language Test Scores","📸 CV and Passport"],
+   steps:["First apply and get accepted to a French university/grande ecole","Ask your French institution to nominate you for Eiffel","Institution submits nomination to Campus France","Application reviewed by selection committee","Results announced in April","Begin visa and accommodation process","Arrive in France for academic year start","Scholarship disbursed monthly"],
+   deadline:"January annually (institutions submit nominations)",
+   link:"https://www.campusfrance.org/en/eiffel-scholarship"},
+
+  {name:"Vanier Canada Graduate Scholarship",country:"Canada",flag:"🇨🇦",amount:"$50,000/year",
+   desc:"The Vanier Canada Graduate Scholarships program aims to attract and retain world-class doctoral students by supporting students who demonstrate both leadership skills and a high standard of scholarly achievement in graduate studies.",
+   benefits:[{val:"$50,000",key:"Annual Award"},{val:"3 Years",key:"Duration"},{val:"$150,000",key:"Total Value"},{val:"Canada",key:"Top Institutions"}],
+   eligibility:["Doctoral students only","Exceptional academic achievement","Demonstrated leadership skills","Nominated by Canadian institution","Canadian or international students","Strong research proposal required"],
+   docs:["📋 Complete Vanier Application","📄 3 Reference Letters","🎓 Academic Transcripts","📝 Research Proposal","💼 Leadership Activities CV","📊 Institutional Nomination"],
+   steps:["Get nominated by your Canadian university","Prepare comprehensive research proposal","Request strong reference letters (3 required)","Document all leadership activities carefully","Submit through ResearchNet portal","Institutional review and ranking","National adjudication committee review","Winners announced in spring"],
+   deadline:"November annually",
+   link:"https://vanier.gc.ca"},
+
+  {name:"Gates Cambridge Scholarship",country:"UK",flag:"🇬🇧",amount:"Full Funding",
+   desc:"The Gates Cambridge Scholarship programme was established in 2000 by a donation from the Bill & Melinda Gates Foundation. It offers full-cost scholarships to outstanding applicants from outside the UK to study at Cambridge University.",
+   benefits:[{val:"100%",key:"Tuition Covered"},{val:"Monthly",key:"Maintenance Allowance"},{val:"✈️ Included",key:"Airfare"},{val:"Extra",key:"Discretionary Funds"}],
+   eligibility:["Must apply to Cambridge University first","Citizens of any country except UK","Outstanding academic achievement","Leadership and social commitment","Desire to improve lives of others","All degree levels: PhD MPhil MBA"],
+   docs:["📋 Cambridge Application (submitted first)","📄 References via Cambridge system","🎓 Academic Transcripts","📝 Gates Cambridge Essay","🔬 Research Proposal if applicable","📸 CV and Supporting Documents"],
+   steps:["Apply to Cambridge University for your chosen program","Select Gates Cambridge on your application form","Submit a compelling personal statement","Gates Cambridge essay about how you will improve the world","Shortlisted candidates invited to interview in January/February","Interview conducted by Gates Cambridge selectors","Results in March/April","Visa and arrival process begins"],
+   deadline:"October (US applicants) / December (all others)",
+   link:"https://www.gatescambridge.org"},
+
+  {name:"Commonwealth Scholarship UK",country:"UK",flag:"🇬🇧",amount:"Full Funding",
+   desc:"Commonwealth Scholarships are for citizens of Commonwealth countries for postgraduate study in the UK, funded by the UK government. They are administered by the Commonwealth Scholarship Commission.",
+   benefits:[{val:"100%",key:"Tuition & Fees"},{val:"Monthly",key:"Living Allowance"},{val:"✈️ Included",key:"Return Airfare"},{val:"Extra",key:"Thesis Grant"}],
+   eligibility:["Citizens of Commonwealth countries","First-class bachelor's degree or equivalent","Cannot be permanent resident of UK","Committed to development in home country","English proficiency required","Under 35 years for most scholarships"],
+   docs:["📋 Commonwealth Application Form","📄 3 Reference Letters","🎓 Degree Certificates and Transcripts","📝 Study Plan","💬 English Language Certificate","📸 Passport and Photo"],
+   steps:["Apply through your home country's nominating agency","Get nominated — most countries have limited spots","Complete full Commonwealth application form","Write detailed and compelling study plan","Obtain 3 strong references from academics","Submit by country deadline (usually December)","Shortlisted candidates interviewed","Selected candidates notified by April/May"],
+   deadline:"December (varies by country)",
+   link:"https://cscuk.fcdo.gov.uk"},
+
+  {name:"Erasmus+ Scholarship",country:"Germany",flag:"🇩🇪",amount:"200-500 EUR/month",
+   desc:"Erasmus+ is the EU's programme to support education, training, youth and sport in Europe and beyond. It enables students to study or train abroad, receiving financial support for living costs during their mobility period.",
+   benefits:[{val:"EUR 200-500",key:"Monthly Grant"},{val:"Included",key:"Travel Support"},{val:"1 Semester",key:"Minimum Period"},{val:"1 Year",key:"Maximum Period"}],
+   eligibility:["Must be enrolled at participating institution","EU or partner country student","Study at partner university abroad","Cannot go to own country","Good academic standing","Nominated by home institution"],
+   docs:["📋 Erasmus Application at your university","📄 Transcript of Records","🎓 Language Certificate","📝 Learning Agreement","💼 Motivation Letter","📸 Student ID"],
+   steps:["Talk to your university's international office","Apply internally — your institution nominates you","Get accepted by host university abroad","Sign Learning Agreement (courses approved)","Apply for Erasmus grant payment","Complete language preparation if needed","Arrive at host country and register","Report on experience after return"],
+   deadline:"Varies by institution (usually February for autumn)",
+   link:"https://erasmus-plus.ec.europa.eu"},
+
+  {name:"Lester B. Pearson Scholarship",country:"Canada",flag:"🇨🇦",amount:"Full Funding",
+   desc:"The Lester B. Pearson International Scholarship Program at the University of Toronto recognizes international students who demonstrate exceptional academic achievement and creativity, and who are recognized as leaders within their school.",
+   benefits:[{val:"100%",key:"Tuition Covered"},{val:"Included",key:"Books & Incidentals"},{val:"Included",key:"Full Residence"},{val:"4 Years",key:"Duration"}],
+   eligibility:["Currently in final year of high school","International students only (non-Canadian)","Nominated by your high school","Outstanding academic achievement","Demonstrated leadership and community service","Creativity and potential to contribute"],
+   docs:["📋 Online Pearson Application","📄 School Reference from Principal","🎓 Official Transcripts","📝 Personal Essays","💼 Activity List and Achievements","📸 Photo and Passport Copy"],
+   steps:["Ask your high school to nominate you (school must register)","Complete the Pearson online application","Write compelling essays about leadership and goals","Ensure transcripts and reference are submitted","Shortlisted candidates may be contacted","Final selection by scholarship committee","Winners notified by March","Accept and prepare to enroll at U of T"],
+   deadline:"November annually",
+   link:"https://future.utoronto.ca/pearson"},
+
+  {name:"MEXT Japan Scholarship",country:"USA",flag:"🌏",amount:"Full Funding",
+   desc:"The Japanese Government (MEXT) Scholarship is offered to international students who wish to study at Japanese universities as research students, undergraduate students, or specialized training college students.",
+   benefits:[{val:"Full",key:"Tuition Waiver"},{val:"Monthly",key:"Living Stipend"},{val:"✈️ Included",key:"Airfare"},{val:"Japanese",key:"Language Training"}],
+   eligibility:["Under 35 years for research scholarships","Nationality eligible countries (most)","Good academic record","Physical and mental health","Willing to learn Japanese","Return to home country possible commitment"],
+   docs:["📋 MEXT Application Form","📄 2 Recommendation Letters","🎓 Academic Transcripts","📝 Field of Study Research Plan","💬 Language Proficiency Evidence","📸 Photo and Passport","🏥 Medical Certificate"],
+   steps:["Apply through Japanese Embassy in your country","Check if embassy or university recommendation route","Complete application forms carefully","Take Japanese language test at Embassy","Shortlisted candidates attend interview at Embassy","Primary screening by Embassy","Secondary screening by Japanese university","Final result announced and visa prepared"],
+   deadline:"May-June annually (Embassy route)",
+   link:"https://www.mext.go.jp"},
+];
+
+const visaData=[
+  {country:"USA",flag:"🇺🇸",type:"F-1 Student Visa",processingTime:"3-5 weeks",fee:"$160 USD",duration:"Duration of study",note:"Apply ASAP after receiving I-20. Mandatory interview at US Embassy required. SEVIS fee $350 also required."},
+  {country:"UK",flag:"🇬🇧",type:"Student Visa (Tier 4)",processingTime:"3 weeks",fee:"490 GBP",duration:"Course length + extra",note:"Apply up to 6 months before course start. IHS surcharge 776 GBP/year applies on top of visa fee."},
+  {country:"Canada",flag:"🇨🇦",type:"Study Permit",processingTime:"4-12 weeks",fee:"CAD $150",duration:"Course length + 90 days",note:"Apply online via IRCC. Student Direct Stream available for faster processing from eligible countries."},
+  {country:"Germany",flag:"🇩🇪",type:"National Visa (Type D)",processingTime:"4-12 weeks",fee:"75 EUR",duration:"Up to 1 year (renewable)",note:"Open blocked account Sperrkonto with 11,208 EUR before applying. Extend permit after arrival in Germany."},
+  {country:"Australia",flag:"🇦🇺",type:"Student Visa (Subclass 500)",processingTime:"4-6 weeks",fee:"AUD $650",duration:"Course length + 1 month",note:"Apply via ImmiAccount online. Overseas Student Health Cover OSHC is mandatory. GTE statement required."},
+  {country:"France",flag:"🇫🇷",type:"Long-Stay Student Visa",processingTime:"2-4 weeks",fee:"50 EUR",duration:"Up to 1 year",note:"Validate visa online after arrival via OFII portal within 3 months. Renewable for multi-year programs."},
+];
+
+let lastPage="home";
+
+// ─── RENDER ───
+function uniCard(u){
+  const t=u.tuition<5000?"EUR "+u.tuition.toLocaleString():"$"+u.tuition.toLocaleString();
+  return `<div class="uni-card" onclick="openUniDetail('${u.name.replace(/'/g,"\\'")}')">
+    <div class="uni-img" style="background:${u.bg}">
+      <img src="${u.img}" alt="${u.name}" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
+      <div class="uni-img-fallback" style="background:${u.bg}">${u.emoji}</div>
+      <span class="uni-flag">${u.flag}</span>
+      <div class="uni-overlay"></div>
+    </div>
+    <div class="uni-body">
+      <div class="uni-name">${u.name}</div>
+      <div class="uni-location">${u.country} · Est. ${u.founded}</div>
+      <div class="uni-tags"><span class="tag gold">${u.ranking}</span>${u.programs.slice(0,2).map(p=>`<span class="tag">${p}</span>`).join("")}</div>
+      <div class="uni-info">
+        <div class="uni-info-item"><div class="uni-info-val">${t}</div><div class="uni-info-key">Tuition/yr</div></div>
+        <div class="uni-info-item"><div class="uni-info-val">${u.acceptance}</div><div class="uni-info-key">Acceptance</div></div>
+        <div class="uni-info-item"><div class="uni-info-val">${u.students}</div><div class="uni-info-key">Students</div></div>
+      </div>
+      <button class="view-btn">View Full Details →</button>
+    </div>
+  </div>`;
+}
+
+function scholCard(s){
+  return `<div class="schol-card" onclick="openScholDetail('${s.name.replace(/'/g,"\\'")}')">
+    <div class="schol-header"><div class="schol-name">${s.flag} ${s.name}</div><div class="schol-amount">${s.amount}</div></div>
+    <div class="schol-country">${s.country}</div>
+    <div class="schol-desc">${s.desc.slice(0,140)}...</div>
+    <div class="schol-elig">✅ ${s.eligibility[0]}</div>
+    <button class="schol-view-btn">View Requirements & How to Apply →</button>
+  </div>`;
+}
+
+function openUniDetail(name){
+  const u=universities.find(x=>x.name===name);
+  if(!u)return;
+  lastPage=document.querySelector(".page.active").id.replace("page-","");
+  document.getElementById("detailImg").src=u.img;
+  document.getElementById("detailImg").style.display="block";
+  document.getElementById("detailFallback").style.display="none";
+  document.getElementById("detailFallback").textContent=u.emoji;
+  document.getElementById("detailName").textContent=u.name;
+  document.getElementById("detailSub").innerHTML=`${u.flag} ${u.country} &nbsp;·&nbsp; ${u.location}`;
+  document.getElementById("detailWebsite").href=u.website;
+  const t=u.tuition<5000?"EUR "+u.tuition.toLocaleString():"$"+u.tuition.toLocaleString();
+  document.getElementById("detailStats").innerHTML=`
+    <div class="detail-stat"><div class="detail-stat-val">${u.ranking}</div><div class="detail-stat-key">Ranking</div></div>
+    <div class="detail-stat"><div class="detail-stat-val">${t}</div><div class="detail-stat-key">Tuition/Year</div></div>
+    <div class="detail-stat"><div class="detail-stat-val">${u.acceptance}</div><div class="detail-stat-key">Acceptance</div></div>`;
+  document.getElementById("detailOverview").innerHTML=`
+    <div class="detail-item"><div class="detail-item-key">Type</div><div class="detail-item-val">${u.overview.type}</div></div>
+    <div class="detail-item"><div class="detail-item-key">Founded</div><div class="detail-item-val">${u.founded}</div></div>
+    <div class="detail-item"><div class="detail-item-key">Campus</div><div class="detail-item-val">${u.overview.campus}</div></div>
+    <div class="detail-item"><div class="detail-item-key">Students</div><div class="detail-item-val">${u.students}</div></div>
+    <div class="detail-item"><div class="detail-item-key">International</div><div class="detail-item-val">${u.overview.intlStudents}</div></div>
+    <div class="detail-item"><div class="detail-item-key">Endowment</div><div class="detail-item-val">${u.overview.endowment}</div></div>`;
+  document.getElementById("detailPrograms").innerHTML=u.programs.map(p=>`<span class="program-tag">${p}</span>`).join("");
+  document.getElementById("detailReqs").innerHTML=u.requirements.map(r=>`<div class="req-item"><div style="font-size:18px;flex-shrink:0">✅</div><div class="req-text">${r}</div></div>`).join("");
+  document.getElementById("detailAlumni").innerHTML=u.alumni.map(a=>`<div class="alumni-item"><div class="alumni-emoji">${a.emoji}</div><div><div class="alumni-name">${a.name}</div><div class="alumni-desc">${a.desc}</div></div></div>`).join("");
+  showPageById("detail");
+  window.scrollTo(0,0);
+}
+
+function openScholDetail(name){
+  const s=scholarships.find(x=>x.name===name);
+  if(!s)return;
+  lastPage=document.querySelector(".page.active").id.replace("page-","");
+  document.getElementById("sdAmount").textContent=s.amount;
+  document.getElementById("sdName").textContent=`${s.flag} ${s.name}`;
+  document.getElementById("sdCountry").textContent=s.country;
+  document.getElementById("sdDesc").textContent=s.desc;
+  document.getElementById("sdBenefits").innerHTML=s.benefits.map(b=>`<div class="benefit-item"><div class="benefit-val">${b.val}</div><div class="benefit-key">${b.key}</div></div>`).join("");
+  document.getElementById("sdEligibility").innerHTML=s.eligibility.map(e=>`<div class="req-item"><div style="font-size:18px;flex-shrink:0">✅</div><div class="req-text">${e}</div></div>`).join("");
+  document.getElementById("sdDocs").innerHTML=s.docs.map(d=>`<div class="doc-tag">${d}</div>`).join("");
+  document.getElementById("sdSteps").innerHTML=s.steps.map((st,i)=>`<div class="step-item"><div class="step-num">${i+1}</div><div class="step-text">${st}</div></div>`).join("");
+  document.getElementById("sdApplyLink").href=s.link;
+  showPageById("schol-detail");
+  window.scrollTo(0,0);
+}
+
+function goBack(){showPageById(lastPage);window.scrollTo(0,0);}
+
+function showPageById(page){
+  document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
+  document.querySelectorAll(".nav-btn").forEach(b=>b.classList.remove("active"));
+  document.getElementById("page-"+page).classList.add("active");
+  const idx={home:0,universities:1,scholarships:2,visa:3};
+  if(idx[page]!==undefined)document.querySelectorAll(".nav-btn")[idx[page]].classList.add("active");
+}
+
+function init(){
+  const featured=universities.filter(u=>["Harvard University","University of Oxford","TU Munich","University of Toronto","University of Melbourne","HEC Paris"].includes(u.name));
+  document.getElementById("featuredUnis").innerHTML=featured.map(uniCard).join("");
+  renderUniGrid();renderUniTabs();renderScholTabs();renderScholGrid("all");renderVisaGrid();
+}
+
+function renderUniGrid(list){
+  list=list||universities;
+  document.getElementById("uniGrid").innerHTML=list.length?list.map(uniCard).join(""):'<div class="empty"><div style="font-size:48px;margin-bottom:12px">🔍</div><p>No universities found. Try different filters.</p></div>';
+}
+
+function renderUniTabs(){
+  const c=["all","USA","UK","Canada","Germany","Australia","France"];
+  document.getElementById("uniCountryTabs").innerHTML=c.map(x=>`<button class="country-tab ${x==="all"?"active":""}" onclick="filterByCountryTab('${x}',this)">${x==="all"?"🌍 All":x}</button>`).join("");
+}
+
+function renderScholTabs(){
+  const c=["all","USA","UK","Canada","Germany","Australia","France"];
+  document.getElementById("scholTabs").innerHTML=c.map(x=>`<button class="country-tab ${x==="all"?"active":""}" onclick="filterSchol('${x}',this)">${x==="all"?"🌍 All":x}</button>`).join("");
+}
+
+function renderScholGrid(country){
+  const list=country==="all"?scholarships:scholarships.filter(s=>s.country===country);
+  document.getElementById("scholGrid").innerHTML=list.length?list.map(scholCard).join(""):'<div class="empty"><div style="font-size:48px;margin-bottom:12px">🔍</div><p>No scholarships found for this country.</p></div>';
+}
+
+function renderVisaGrid(){
+  document.getElementById("visaGrid").innerHTML=visaData.map(v=>`
+    <div class="visa-card">
+      <div class="visa-header"><div class="visa-flag">${v.flag}</div><div><div class="visa-country">${v.country}</div><div class="visa-type">${v.type}</div></div></div>
+      <div class="visa-row"><span class="visa-key">Processing Time</span><span class="visa-val">${v.processingTime}</span></div>
+      <div class="visa-row"><span class="visa-key">Visa Fee</span><span class="visa-val">${v.fee}</span></div>
+      <div class="visa-row"><span class="visa-key">Duration</span><span class="visa-val">${v.duration}</span></div>
+      <div class="visa-note">💡 ${v.note}</div>
+    </div>`).join("");
+}
+
+function filterUnis(){
+  const country=document.getElementById("countryFilter").value;
+  const budget=document.getElementById("budgetFilter").value;
+  const degree=document.getElementById("degreeFilter").value;
+  let list=universities;
+  if(country!=="all")list=list.filter(u=>u.country===country);
+  if(budget==="free")list=list.filter(u=>u.tuition<5000);
+  if(budget==="low")list=list.filter(u=>u.tuition>=5000&&u.tuition<20000);
+  if(budget==="mid")list=list.filter(u=>u.tuition>=20000&&u.tuition<=40000);
+  if(budget==="high")list=list.filter(u=>u.tuition>40000);
+  if(degree!=="all")list=list.filter(u=>u.degrees.includes(degree));
+  renderUniGrid(list);
+}
+
+function filterByCountryTab(country,el){
+  document.querySelectorAll("#uniCountryTabs .country-tab").forEach(t=>t.classList.remove("active"));
+  el.classList.add("active");
+  document.getElementById("countryFilter").value=country;
+  filterUnis();
+}
+
+function filterSchol(country,el){
+  document.querySelectorAll("#scholTabs .country-tab").forEach(t=>t.classList.remove("active"));
+  el.classList.add("active");
+  renderScholGrid(country);
+}
+
+function showPage(page,btn){
+  document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
+  document.querySelectorAll(".nav-btn").forEach(b=>b.classList.remove("active"));
+  document.getElementById("page-"+page).classList.add("active");
+  btn.classList.add("active");
+  window.scrollTo(0,0);
+}
+
+function goToCountry(country){
+  document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
+  document.querySelectorAll(".nav-btn").forEach(b=>b.classList.remove("active"));
+  document.getElementById("page-universities").classList.add("active");
+  document.querySelectorAll(".nav-btn")[1].classList.add("active");
+  document.getElementById("countryFilter").value=country;
+  filterUnis();
+  document.querySelectorAll("#uniCountryTabs .country-tab").forEach(t=>t.classList.toggle("active",t.textContent.trim()===country));
+  window.scrollTo(0,0);
+}
+
+function handleHomeSearch(val){
+  const box=document.getElementById("searchResults");
+  const list=document.getElementById("searchList");
+  if(!val.trim()){box.style.display="none";return;}
+  const results=universities.filter(u=>u.name.toLowerCase().includes(val.toLowerCase())||u.country.toLowerCase().includes(val.toLowerCase())||u.programs.some(p=>p.toLowerCase().includes(val.toLowerCase()))).slice(0,6);
+  if(!results.length){box.style.display="none";return;}
+  list.innerHTML=results.map(u=>`<div onclick="openUniDetail('${u.name.replace(/'/g,"\\'")}');document.getElementById('searchResults').style.display='none'" style="padding:12px 16px;cursor:pointer;border-bottom:1px solid rgba(255,255,255,0.06);display:flex;align-items:center;gap:12px;transition:background 0.15s" onmouseover="this.style.background='rgba(255,255,255,0.04)'" onmouseout="this.style.background='none'"><span style="font-size:22px">${u.emoji}</span><div><div style="font-weight:600;font-size:14px">${u.name}</div><div style="color:#999;font-size:12px">${u.flag} ${u.country} · ${u.ranking}</div></div></div>`).join("");
+  box.style.display="block";
+}
+
+function goSearch(){
+  const val=document.getElementById("homeSearch").value;
+  if(!val.trim())return;
+  document.getElementById("searchResults").style.display="none";
+  showPageById("universities");
+  document.querySelectorAll(".nav-btn")[1].classList.add("active");
+  renderUniGrid(universities.filter(u=>u.name.toLowerCase().includes(val.toLowerCase())||u.country.toLowerCase().includes(val.toLowerCase())||u.programs.some(p=>p.toLowerCase().includes(val.toLowerCase()))));
+  window.scrollTo(0,0);
+}
+
+let chatOpen=false;
+function toggleChat(){chatOpen=!chatOpen;document.getElementById("chatWindow").classList.toggle("open",chatOpen);if(chatOpen)document.getElementById("chatInput").focus();}
+
+async function sendChat(){
+  const input=document.getElementById("chatInput");
+  const msg=input.value.trim();
+  if(!msg)return;
+  input.value="";
+  addMsg(msg,"user");
+  const loadId=addMsg("Thinking...","bot");
+  try{
+    const res=await fetch(GROQ_URL,{method:"POST",headers:{"Content-Type":"application/json","Authorization":`Bearer ${GROQ_KEY}`},body:JSON.stringify({model:"llama3-8b-8192",messages:[{role:"system",content:"You are NextCampus AI, a friendly expert study abroad advisor. Help students find universities, scholarships, and visa information for USA, UK, Canada, Germany, Australia, and France. Give concise, practical, helpful advice. Use emojis occasionally. Be encouraging and supportive."},{role:"user",content:msg}],temperature:0.7,max_tokens:400})});
+    const data=await res.json();
+    document.getElementById(loadId).textContent=data.choices[0].message.content;
+  }catch(e){document.getElementById(loadId).textContent="Sorry, could not connect. Please try again!";}
+}
+
+function addMsg(text,type){
+  const msgs=document.getElementById("chatMessages");
+  const id="msg-"+Date.now()+Math.random();
+  const div=document.createElement("div");
+  div.className="msg "+type;div.id=id;div.textContent=text;
+  msgs.appendChild(div);msgs.scrollTop=msgs.scrollHeight;
+  return id;
+}
+
+document.addEventListener("click",e=>{
+  if(!e.target.closest(".search-wrap")&&!e.target.closest("#searchResults"))
+    document.getElementById("searchResults").style.display="none";
+});
+
+init();
+</script>
+</body>
+</html>
